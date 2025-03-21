@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+# Triggers - defines when the workflow runs
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+# Environment variables available to all jobs
+env:
+  NODE_VERSION: '16.x'
+
+# Jobs to run in parallel or sequence
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest  # Defines the runner environment
+    
+    steps:
+      # Check out the repository code
+      - uses: actions/checkout@v3
+          
+      # Install dependencies
+      - name: Install Dependencies
+        run: echo "Installing dependencies..."
+        
+      # Run tests
+      - name: Run Tests
+        run: echo "Running tests..."
+
+  deploy:
+    name: Deploy
+    needs: build  # Depends on build job completion
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Only deploy on main branch
+    
+    steps:  
+      # Deploy step (example)
+      - name: Deploy to Production
+        run: echo "Deploy step would go here"
